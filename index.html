@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerador de Chave Mestra</title>
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      margin-top: 50px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      width: 250px;
+    }
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+      word-break: break-all;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Gerador de Chave Mestra</h2>
+
+  <input type="text" id="nome" placeholder="Digite o nome">
+  <br>
+  <button onclick="gerarChave()">Gerar Chave</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function gerarChave() {
+      const nome = document.getElementById("nome").value;
+
+      if (!nome) {
+        alert("Digite um nome!");
+        return;
+      }
+
+      // Gerar 32 bytes aleatórios (igual ao Python)
+      const array = new Uint8Array(32);
+      window.crypto.getRandomValues(array);
+
+      // Converter para base64 URL-safe
+      let base64 = btoa(String.fromCharCode(...array))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+
+      // Misturar com o nome
+      const chaveFinal = btoa(nome).replace(/=+$/, '') + "." + base64;
+
+      document.getElementById("resultado").innerText = chaveFinal;
+    }
+  </script>
+
+</body>
+</html>
